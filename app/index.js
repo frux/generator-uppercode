@@ -1,4 +1,5 @@
-var generators = require('yeoman-generator');
+var generators = require('yeoman-generator'),
+    fs = require('fs');
 
 module.exports = generators.Base.extend({
     constructor: function(){
@@ -17,8 +18,12 @@ module.exports = generators.Base.extend({
         }.bind(this));
     },
     writing: function(){
-        this.template('hooks/pre-commit', './.git/hooks/pre-commit');
-        this.template('uppercode/pre-commit.js', './uppercode/pre-commit.js');
+        this.template('hooks/pre-commit', '.git/hooks/pre-commit');
+        this.template('uppercode/pre-commit.js', 'uppercode/pre-commit.js');
+
+        setTimeout((function(){
+            fs.chmodSync(this.destinationPath('.git/hooks/pre-commit'), '0755');
+        }).bind(this), 100);
     },
     install: function(){}
 });
