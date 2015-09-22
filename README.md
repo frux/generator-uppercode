@@ -1,2 +1,2 @@
 # generator-uppercode
-##Need some hooks? Get uppercode!
+## Better hooks with Uppercode!
