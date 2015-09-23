@@ -1,4 +1,5 @@
 var generators = require('yeoman-generator'),
+    Uppercode = require('../index'),
     fs = require('fs');
 
 module.exports = generators.Base.extend({
@@ -21,8 +22,7 @@ module.exports = generators.Base.extend({
         }.bind(this));
     },
     writing: function(){
-        fs.unlinkSync(this.destinationPath('./uppercode/pre-commit.js'));
-        fs.rmdirSync(this.destinationPath('./uppercode'));
-        fs.unlinkSync(this.destinationPath('./.git/hooks/pre-commit'));
+        Uppercode.execSync('rm -rf .githooks/uppercode');
+        this.spawnCommand('npm', ['uninstall', '--save-dev', 'git-hooks']);
     }
 });

@@ -1,0 +1,18 @@
+{
+  "name": "uppercode-hooks",
+  "version": "0.0.0",
+  "description": "Uppercode hooks for this project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "uppercode",
+    "hooks"
+  ],
+  "author": "Vladimir Kudinov <qdinov@yandex.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "generator-uppercode": "^0.0.0"
+  }
+}
