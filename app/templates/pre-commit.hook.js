@@ -1,28 +1,42 @@
 #!/usr/bin/env node
 var Uppercode = require('generator-uppercode'),
     plugins = Uppercode.execSync('cd .githooks && npm ls --depth=0 --parseable | grep /.githooks/node_modules/uppercode-'),
-    next = function(){
-        var pluginPath,
-            pluginName,
-            plugin;
-
-        if(plugins.length){
-            pluginPath = plugins.shift();
-            pluginName = pluginPath.substr(pluginPath.lastIndexOf('/') + 1);
-            plugin = require(pluginName);
-
-            if(plugin['pre-commit']){
-                plugin['pre-commit'].call(Uppercode, next);
-            }else{
-                next();
-            }
-        }
-    };
+    timestamp;
 
 plugins = plugins.split('\n').map(function(plugin){
     return plugin.substr(plugin.lastIndexOf('/') + 1);
 });
 
-next();
+function next(){
+    var pluginPath,
+        pluginName,
+        plugin;
 
-//TODO: start and finish labels
+    if(plugins.length){
+        pluginPath = plugins.shift();
+        pluginName = pluginPath.substr(pluginPath.lastIndexOf('/') + 1);
+        plugin = require(pluginName)['pre-commit'];
+
+        if(plugin){
+            plugin.call(Uppercode, next);
+        }else{
+            next();
+        }
+    }else{
+        finish();
+    }
+}
+
+function start(){
+    timestamp = +new Date;
+    console.log('==================\nUppercode started:');
+    next();
+}
+
+function finish(){
+    console.log('Uppercode has finished in ' + (+new Date - timestamp) + 'ms\n==================');
+}
+
+if(plugins.length){
+    start();
+}
