@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var Uppercode = require('generator-uppercode'),
     plugins = Uppercode.globalModulesSync('uppercode-'),
     next = function(){

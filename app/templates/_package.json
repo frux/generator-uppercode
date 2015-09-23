@@ -11,8 +11,5 @@
     "hooks"
   ],
   "author": "Vladimir Kudinov <qdinov@yandex.ru>",
-  "license": "MIT",
-  "dependencies": {
-    "generator-uppercode": "^0.0.0"
-  }
+  "license": "MIT"
 }

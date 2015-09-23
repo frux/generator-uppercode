@@ -30,21 +30,21 @@ module.exports = generators.Base.extend({
         }.bind(this));
     },
     writing: function(){
-        this.template('pre-commit.hook.js', '.githooks/uppercode/pre-commit.hook.js');
-        this.template('_package.json', '.githooks/uppercode/package.json');
+        this.template('pre-commit.hook.js', '.githooks/pre-commit/uppercode.hook.js');
+        this.template('_package.json', '.githooks/package.json');
 
         setTimeout((function(){
-            fs.chmodSync(this.destinationPath('.githooks/uppercode/pre-commit.hook.js'), '0755');
+            fs.chmodSync(this.destinationPath('.githooks/pre-commit/uppercode.hook.js'), '0755');
         }).bind(this), 100);
     },
     install: {
         githooks: function(){
             this.npmInstall(['git-hooks'], { 'saveDev': true });
 
-            this.plugins.forEach((function(plugin){
-                Uppercode.execSync('npm i -S ' + plugin);
-                //this.spawnCommand('cd .githooks/uppercode && npm i --save-dev ' + plugin);
-            }).bind(this));
+            this.plugins.push('generator-uppercode');
+            this.plugins.forEach(function(plugin){
+                Uppercode.execSync('cd .githooks && npm install --save-dev ' + plugin);
+            });
         }
     }
 });

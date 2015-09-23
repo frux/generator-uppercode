@@ -22,7 +22,14 @@ module.exports = generators.Base.extend({
         }.bind(this));
     },
     writing: function(){
-        Uppercode.execSync('rm -rf .githooks/uppercode');
+        ([
+            '.githooks/pre-commit/uppercode.hook.js',
+            '.githooks/package.json',
+            '.githooks/node_modules'
+        ]).forEach(function(pathToDelete){
+                Uppercode.execSync('rm -rf ' + pathToDelete);
+            });
+
         this.spawnCommand('npm', ['uninstall', '--save-dev', 'git-hooks']);
     }
 });
