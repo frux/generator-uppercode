@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var Uppercode = require('generator-uppercode'),
-    plugins = Uppercode.globalModulesSync('uppercode-'),
+    plugins = Uppercode.execSync('cd .githooks && npm ls --depth=0 --parseable | grep /.githooks/node_modules/uppercode-'),
     next = function(){
         var pluginPath,
             pluginName,
@@ -19,4 +19,10 @@ var Uppercode = require('generator-uppercode'),
         }
     };
 
+plugins = plugins.split('\n').map(function(plugin){
+    return plugin.substr(plugin.lastIndexOf('/') + 1);
+});
+
 next();
+
+//TODO: start and finish labels
