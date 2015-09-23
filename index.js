@@ -56,12 +56,14 @@ function execSync(command, args){
     if(typeof command === 'string'){
 
         //if arguments is not an array replace it by empty array
-        if(!(args instanceof Array)){
-            args = [];
+        if(args instanceof Array){
+            args = args.join(' ');
+        }else{
+            args = '';
         }
 
         //run command
-        result = ChildProcess.execSync(command, args).toString().replace(/\n$/, '');
+        result = ChildProcess.execSync(command + ' ' + args).toString().replace(/\n$/, '');
 
         return result;
     }
@@ -99,7 +101,7 @@ function stagedFiles(changeFilter, callback){
         callback = function(){};
     }
 
-    exec('git diff --cached --name-only --diff-filter=ACM', ['diff', '--cached', '--name-only', '--diff-filter=' + changeFilter], function(err, data){
+    exec('git', ['diff', '--cached', '--name-only', '--diff-filter=' + changeFilter], function(err, data){
         var files;
 
         if(err){
@@ -135,7 +137,7 @@ function stagedFilesSync(changeFilter){
     }
 
     try{
-        commandResult = execSync('git diff --cached --name-only --diff-filter=ACM', ['diff', '--cached', '--name-only', '--diff-filter=' + changeFilter]);
+        commandResult = execSync('git', ['diff', '--cached', '--name-only', '--diff-filter=' + changeFilter]);
     }catch(e){
         throw e;
     }
@@ -212,7 +214,7 @@ function globalModulesSync(grep, nameOnly){
     }
 
     try{
-        commandResult = execSync('npm ls -g --depth=0 --parseable' + grep);
+        commandResult = execSync('npm', ['ls', '-g', '--depth=0', '--parseable' + grep]);
     }catch(e){
         throw e;
     }
