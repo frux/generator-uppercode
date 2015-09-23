@@ -1,9 +1,9 @@
 {
   "name": "generator-uppercode",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Yeoman generator",
   "main": "index.js",
-  "files":[
+  "files": [
     "app",
     "uninstall"
   ],
@@ -17,5 +17,14 @@
   "license": "MIT",
   "dependencies": {
     "yeoman-generator": "^0.20.3"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frux/uppercode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/frux/uppercode/issues"
+  },
+  "homepage": "https://github.com/frux/uppercode#readme"
 }
