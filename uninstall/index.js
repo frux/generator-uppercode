@@ -12,7 +12,7 @@ module.exports = generators.Base.extend({
         this.prompt({
             type: 'boolean',
             name: 'sure',
-            message: 'Pre-commit hook will be removed. Are you sure?',
+            message: 'Hooks will be removed. Are you sure?',
             default: true
         }, function(answers){
             if(!answers.sure){
