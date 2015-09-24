@@ -14,7 +14,7 @@
     "yeoman-generator"
   ],
   "author": "Vladimir Kudinov <qdinov@yandex.ru>",
-  "license": "MIT",
+  "license": "WTFPL",
   "dependencies": {
     "yeoman-generator": "^0.20.3"
   },
