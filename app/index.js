@@ -55,7 +55,7 @@ module.exports = generators.Base.extend({
         this.template('_package.json', '.githooks/package.json');
 
         setTimeout((function(){
-            fs.chmodSync(this.destinationPath('.githooks/pre-commit/uppercode.js'), '0755');
+            Uppercode.execSync('chmod', ['-R', '0755', '.githooks/*/uppercode.js']);
         }).bind(this), 100);
     },
     install: {
