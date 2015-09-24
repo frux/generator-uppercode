@@ -22,13 +22,9 @@ module.exports = generators.Base.extend({
         }.bind(this));
     },
     writing: function(){
-        ([
-            '.githooks/pre-commit/uppercode.hook.js',
-            '.githooks/package.json',
-            '.githooks/node_modules'
-        ]).forEach(function(pathToDelete){
-                Uppercode.execSync('rm -rf ' + pathToDelete);
-            });
+        Uppercode.execSync('find .githooks -name uppercode.js -exec rm -rf {} \;');
+        Uppercode.execSync('rm -rf .githooks/package.json');
+        Uppercode.execSync('rm -rf .githooks/node_modules');
 
         this.spawnCommand('npm', ['uninstall', '--save-dev', 'git-hooks']);
     }
