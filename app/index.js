@@ -10,10 +10,10 @@ module.exports = generators.Base.extend({
         var done = this.async(),
             plugins = Uppercode.globalModulesSync('uppercode-', true),
             prompts = [
-                {
-                    name: 'plugins',
+                pulgins && {
+                    name: 'globalPlugins',
                     type: 'checkbox',
-                    message: 'Choose your plugins:',
+                    message: 'Choose from your global plugins:',
                     choices: plugins.map(function(plugin){
                             return {
                                 value: plugin,
@@ -21,11 +21,31 @@ module.exports = generators.Base.extend({
                                 checked: false
                             };
                         })
+                },
+                {
+                    name: 'rowPlugins',
+                    type: 'text',
+                    message: 'List plugins you want to install (separated by space):',
+                    default: ''
                 }
             ];
 
         this.prompt(prompts, function(answers){
-            this.plugins = answers.plugins;
+            var globalPlugins = answers.globalPlugins || [],
+                rowPlugins = answers.rowPlugins || '';
+
+            if(!/^[\sa-z\-\_]+$/i.test(rowPlugins)){
+                throw Error('Plugins must be separated by space. "uppercode-" prefix is not needed. For example: "csscomb jscs yet-another-plugin"');
+            }
+
+            rowPlugins = rowPlugins.trim().split(' ')
+                .filter(function(plugin){ return !!plugin; })
+                .map(function(plugin){
+                    return (plugin.indexOf('uppercode-') === -1 ? 'uppercode-' : '') + plugin;
+                });
+
+            this.plugins = globalPlugins.concat(rowPlugins);
+
             done();
         }.bind(this));
     },
