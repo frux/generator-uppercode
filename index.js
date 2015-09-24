@@ -1,4 +1,12 @@
-var Uppercode,
+var Uppercode = {
+        exec: exec,
+        execSync: execSync,
+        stagedFiles: stagedFiles,
+        stagedFilesSync: stagedFilesSync,
+        globalModules: globalModules,
+        globalModulesSync: globalModulesSync,
+        trigger: triggerHook
+    },
     ChildProcess = require('child_process');
 
 /**
@@ -83,7 +91,7 @@ function stagedFiles(changeFilter, callback){
         if(typeof changeFilter === 'function'){
             callback = changeFilter;
 
-        //if the first argument is a string
+            //if the first argument is a string
         }else if(typeof changeFilter === 'string'){
 
             //if filter is not valid exit
@@ -92,7 +100,7 @@ function stagedFiles(changeFilter, callback){
             }
         }
 
-    //if filter was not specified use default
+        //if filter was not specified use default
     }else{
         changeFilter = '*';
     }
@@ -105,7 +113,7 @@ function stagedFiles(changeFilter, callback){
         var files;
 
         if(err){
-           callback(err);
+            callback(err);
         }
 
         files = data.split('\n');
@@ -131,7 +139,7 @@ function stagedFilesSync(changeFilter){
             return;
         }
 
-    //if filter was not specified use default
+        //if filter was not specified use default
     }else{
         changeFilter = '*';
     }
@@ -230,13 +238,87 @@ function globalModulesSync(grep, nameOnly){
     return modules;
 }
 
-Uppercode = {
-    exec: exec,
-    execSync: execSync,
-    stagedFiles: stagedFiles,
-    stagedFilesSync: stagedFilesSync,
-    globalModules: globalModules,
-    globalModulesSync: globalModulesSync
-};
+/**
+ * Triggers hook
+ * @param event {string} Event that has been hooked
+ * @param callback {Function} Callback function
+ */
+function triggerHook(event, callback){
+    var plugins,
+        timestamp;
+
+    //event should be a string
+    if(typeof event === 'string'){
+
+        //if callback is not a function use empty function
+        if(typeof callback !== 'function'){
+            callback = function(){};
+        }
+
+        //get list of locally installed plugins started with "uppercode-" split it by rows a trim path
+        plugins = execSync('ls -1 ' + __dirname + '/.. | grep uppercode-').split('\n').map(function(plugin){
+            return plugin.substr(plugin.lastIndexOf('/') + 1);
+        });
+
+        /**
+         * Calls next hook
+         */
+        function next(){
+            var pluginPath,
+                pluginName,
+                plugin;
+
+            //if there are plugins which haven't worked yet
+            if(plugins.length){
+
+                //get name of the next plugin in a list
+                pluginName = plugins.shift();
+
+                //connect method of this plugin which called the same as an event
+                plugin = require(pluginName)[event];
+
+                //if this method exists
+                if(plugin){
+
+                    //call it
+                    plugin.call(Uppercode, next);
+
+                }else{
+
+                    //call next
+                    next();
+                }
+            }else{
+
+                //finish hook
+                finish();
+            }
+        }
+
+        /**
+         * Start hook with calling the first plugin
+         */
+        function start(){
+            timestamp = +new Date;
+            console.log('==================\nUppercode started:');
+            next();
+        }
+
+        /**
+         * Finish hook
+         */
+        function finish(){
+            callback();
+            console.log('Uppercode has finished in ' + (+new Date - timestamp) + 'ms\n==================');
+        }
+
+        //if there is any plugin
+        if(plugins.length){
+
+            //start hook
+            start();
+        }
+    }
+}
 
 module.exports = Uppercode;
