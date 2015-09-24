@@ -22,7 +22,7 @@ module.exports = generators.Base.extend({
         }.bind(this));
     },
     writing: function(){
-        Uppercode.execSync('find .githooks -name uppercode.js -exec rm -rf {} \;');
+        Uppercode.execSync('find .githooks -name uppercode.js -exec rm -rf {} \\;');
         Uppercode.execSync('rm -rf .githooks/package.json');
         Uppercode.execSync('rm -rf .githooks/node_modules');
 
