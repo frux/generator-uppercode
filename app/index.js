@@ -83,14 +83,13 @@ module.exports = generators.Base.extend({
             Uppercode.execSync('chmod', ['-R', '0755', '.githooks/*/uppercode.js']);
         }).bind(this), 100);
     },
-    install: {
-        githooks: function(){
-            this.npmInstall(['git-hooks'], { 'saveDev': true });
+    install: function(){
+        console.log('Installing plugins...');
+        this.npmInstall(['git-hooks'], { 'saveDev': true });
 
-            this.plugins.push('generator-uppercode');
-            this.plugins.forEach(function(plugin){
-                Uppercode.execSync('cd .githooks && npm install --save-dev ' + plugin);
-            });
-        }
+        this.plugins.push('generator-uppercode');
+        this.plugins.forEach(function(plugin){
+            Uppercode.execSync('cd .githooks && npm install --save-dev ' + plugin);
+        });
     }
 });
