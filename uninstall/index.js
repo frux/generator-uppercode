@@ -10,7 +10,7 @@ module.exports = generators.Base.extend({
         var done = this.async();
 
         this.prompt({
-            type: 'boolean',
+            type: 'confirm',
             name: 'sure',
             message: 'Hooks will be removed. Are you sure?',
             default: true
