@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var Uppercode = require('generator-uppercode'),
-    plugins = Uppercode.execSync('cd .githooks && npm ls --depth=0 --parseable | grep /.githooks/node_modules/uppercode-'),
+    plugins = Uppercode.execSync('ls -1 .githooks/node_modules | grep uppercode-'),
     timestamp;
 
 plugins = plugins.split('\n').map(function(plugin){
