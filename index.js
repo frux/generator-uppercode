@@ -26,8 +26,10 @@ function exec(command, args, callback){
         }
 
         //if arguments is not an array replace it by empty array
-        if(!(args instanceof Array)){
-            args = [];
+        if(args instanceof Array){
+            args = args.join(' ');
+        }else{
+            args = '';
         }
 
         if(typeof callback !== 'function'){
@@ -35,18 +37,12 @@ function exec(command, args, callback){
         }
 
         //run command
-        commandProcess = ChildProcess.spawn(command, args);
+        ChildProcess.exec(command + ' ' + args, function(err, stdout, stderr){
+            if(err || stderr){
+                callback(err || stderr.toString());
+            }
 
-        //set data listener
-        commandProcess.stdout.on('data', function(data){
-            (callback || function(){
-            })(undefined, data.toString().replace(/\n$/, ''));
-        });
-
-        //set error listener
-        commandProcess.stderr.on('data', function(err){
-            (callback || function(){
-            })(err.toString());
+            callback(undefined, stdout.toString().replace(/\n$/, ''));
         });
     }
 }
