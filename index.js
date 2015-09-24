@@ -251,29 +251,24 @@ function triggerHook(event, callback){
             callback = function(){};
         }
 
-        //get list of locally installed plugins started with "uppercode-" split it by rows a trim path
+        //get list of locally installed plugins started with "uppercode-" split it by rows, trim path, require it
         plugins = execSync('ls -1 ' + __dirname + '/.. | grep uppercode-').split('\n').map(function(plugin){
-            return plugin.substr(plugin.lastIndexOf('/') + 1);
-        });
+            return require(plugin.substr(plugin.lastIndexOf('/') + 1))[event];
+        }).filter(function(plugin){ return !!plugin });
 
         /**
          * Calls next hook
          */
         function next(){
-            var pluginPath,
-                pluginName,
-                plugin;
+            var plugin;
 
             //if there are plugins which haven't worked yet
             if(plugins.length){
 
                 //get name of the next plugin in a list
-                pluginName = plugins.shift();
+                plugin = plugins.shift();
 
-                //connect method of this plugin which called the same as an event
-                plugin = require(pluginName)[event];
-
-                //if this method exists
+                //if this plugin exists
                 if(plugin){
 
                     //call it
