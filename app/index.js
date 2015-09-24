@@ -10,7 +10,7 @@ module.exports = generators.Base.extend({
         var done = this.async(),
             plugins = Uppercode.globalModulesSync('uppercode-', true),
             prompts = [
-                pulgins && {
+                plugins && {
                     name: 'globalPlugins',
                     type: 'checkbox',
                     message: 'Choose from your global plugins:',
@@ -34,7 +34,7 @@ module.exports = generators.Base.extend({
             var globalPlugins = answers.globalPlugins || [],
                 rowPlugins = answers.rowPlugins || '';
 
-            if(!/^[\sa-z\-\_]+$/i.test(rowPlugins)){
+            if(!/^([\sa-z\-\_]+)?$/i.test(rowPlugins)){
                 throw Error('Plugins must be separated by space. "uppercode-" prefix is not needed. For example: "csscomb jscs yet-another-plugin"');
             }
 
@@ -45,6 +45,11 @@ module.exports = generators.Base.extend({
                 });
 
             this.plugins = globalPlugins.concat(rowPlugins);
+
+            if(!this.plugins.length){
+                console.log('No plugins were selected');
+                process.exit(0);
+            }
 
             done();
         }.bind(this));
