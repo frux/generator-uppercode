@@ -16,7 +16,7 @@ You should list all of the plugins you are going to use in your project. For exa
 
 Instead of listing plugins every time you use Uppercode you can globally install all of the plugins that you are going to use in your projects. Uppercode will offer you to select plugins from the list.
 
-Here is the list of some plugins available to use:
+**Here is the list of some plugins available to use:**
  * [uppercode-csscomb](https://github.com/frux/uppercode-csscomb)
 
 ## Remove hooks
