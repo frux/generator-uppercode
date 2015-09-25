@@ -1,6 +1,5 @@
 var generators = require('yeoman-generator'),
-    Uppercode = require('../index'),
-    fs = require('fs');
+    Uppercode = require('../index');
 
 module.exports = generators.Base.extend({
     constructor: function(){
