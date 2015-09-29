@@ -36,14 +36,18 @@ function exec(command, args, callback){
             callback = function(){};
         }
 
-        //run command
-        ChildProcess.exec(command + ' ' + args, function(err, stdout, stderr){
-            if(err || stderr){
-                callback(err || stderr.toString());
-            }
+        try{
+            //run command
+            ChildProcess.exec(command + ' ' + args, function(err, stdout, stderr){
+                if(err || stderr){
+                    callback(err || stderr.toString());
+                }
 
-            callback(undefined, stdout.toString().replace(/\n$/, ''));
-        });
+                callback(undefined, stdout.toString().replace(/\n$/, ''));
+            });
+        }catch(e){
+            callback(e);
+        }
     }
 }
 
@@ -66,8 +70,12 @@ function execSync(command, args){
             args = '';
         }
 
-        //run command
-        result = ChildProcess.execSync(command + ' ' + args).toString().replace(/\n$/, '');
+        try{
+            //run command
+            result = ChildProcess.execSync(command + ' ' + args).toString().replace(/\n$/, '');
+        }catch(e){
+            return;
+        }
 
         return result;
     }
@@ -185,12 +193,16 @@ function globalModules(grep, nameOnly, callback){
             callback(err);
         }
 
-        modules = data.split('\n');
+        if(data){
+            modules = data.split('\n');
 
-        if(nameOnly){
-            modules = modules.map(function(modulePath){
-                return modulePath.substr(modulePath.lastIndexOf('/') + 1);
-            });
+            if(nameOnly){
+                modules = modules.map(function(modulePath){
+                    return modulePath.substr(modulePath.lastIndexOf('/') + 1);
+                });
+            }
+        }else{
+            modules = [];
         }
 
         callback(undefined, modules);
@@ -217,18 +229,18 @@ function globalModulesSync(grep, nameOnly){
         grep = '';
     }
 
-    try{
-        commandResult = execSync('npm', ['ls', '-g', '--depth=0', '--parseable' + grep]);
-    }catch(e){
-        throw e;
-    }
+    commandResult = execSync('npm', ['ls', '-g', '--depth=0', '--parseable' + grep]);
 
-    modules = commandResult.split('\n');
+    if(commandResult){
+        modules = commandResult.split('\n');
 
-    if(nameOnly){
-        modules = modules.map(function(modulePath){
-            return modulePath.substr(modulePath.lastIndexOf('/') + 1);
-        });
+        if(nameOnly){
+            modules = modules.map(function(modulePath){
+                return modulePath.substr(modulePath.lastIndexOf('/') + 1);
+            });
+        }
+    }else{
+        modules = [];
     }
 
     return modules;
