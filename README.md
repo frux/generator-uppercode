@@ -21,8 +21,7 @@ Instead of listing plugins every time you use Uppercode you can globally install
 ````
 If you aren't going to share your hooks Upperode can add it to your .gitignore.
 
-**Here is the list of some plugins available to use:**
- * [uppercode-csscomb](https://github.com/frux/uppercode-csscomb)
+[Full list of available plugins](https://www.npmjs.com/search?q=uppercode)
 
 ## Remove hooks
 ``yo uppercode:uninstall``
