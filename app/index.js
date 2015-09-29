@@ -1,5 +1,6 @@
 var generators = require('yeoman-generator'),
-    Uppercode = require('../index');
+    Uppercode = require('../index'),
+    fs = require('fs');
 
 module.exports = generators.Base.extend({
     constructor: function(){
@@ -26,6 +27,12 @@ module.exports = generators.Base.extend({
                     type: 'text',
                     message: 'List plugins you want to install (separated by space):',
                     default: ''
+                },
+                {
+                    name: 'gitignore',
+                    type: 'confirm',
+                    message: 'Do you want to add the hooks in .gitignore',
+                    default: false
                 }
             ];
 
@@ -44,6 +51,7 @@ module.exports = generators.Base.extend({
                 });
 
             this.plugins = globalPlugins.concat(rowPlugins);
+            this.gitignore = answers.gitignore;
 
             if(!this.plugins.length){
                 console.log('No plugins were selected');
@@ -78,9 +86,15 @@ module.exports = generators.Base.extend({
 
         this.template('_package.json', '.githooks/package.json');
 
-        setTimeout((function(){
+        Uppercode.exec('cat', ['.gitignore'], function(err, data){
+            if(err){
+                Uppercode.execSync('touch', ['.gitignore']);
+            }
+
+            Uppercode.execSync('echo', ['".githooks"', '>>', '.gitignore']);
+
             Uppercode.execSync('chmod', ['-R', '0755', '.githooks/*/uppercode.js']);
-        }).bind(this), 100);
+        });
     },
     install: function(){
         console.log('Installing plugins...');
