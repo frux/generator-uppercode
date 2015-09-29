@@ -73,7 +73,7 @@ module.exports = generators.Base.extend({
             'post-rewrite',
             'pre-push'
         ]).map((function(hook){
-            this.template('hook.js', '.githooks/' + hook + '/uppercode.js', {hook: hook});
+            this.template('_hook.js', '.githooks/' + hook + '/uppercode.js', {hook: hook});
         }).bind(this));
 
         this.template('_package.json', '.githooks/package.json');
