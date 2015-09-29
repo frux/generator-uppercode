@@ -1,6 +1,6 @@
 {
   "name": "generator-uppercode",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "description": "Yeoman generator",
   "main": "index.js",
   "files": [
@@ -11,14 +11,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "uppercode",
+    "hooks"
   ],
   "author": "Vladimir Kudinov <qdinov@yandex.ru>",
   "license": "WTFPL",
   "dependencies": {
     "yeoman-generator": "^0.20.3"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frux/uppercode.git"
