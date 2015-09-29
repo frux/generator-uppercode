@@ -10,18 +10,6 @@ module.exports = generators.Base.extend({
         var done = this.async(),
             plugins = Uppercode.globalModulesSync('uppercode-', true),
             prompts = [
-                plugins && {
-                    name: 'globalPlugins',
-                    type: 'checkbox',
-                    message: 'Choose from your global plugins:',
-                    choices: plugins.map(function(plugin){
-                            return {
-                                value: plugin,
-                                name: plugin.replace('uppercode-', ''),
-                                checked: false
-                            };
-                        })
-                },
                 {
                     name: 'rowPlugins',
                     type: 'text',
@@ -35,6 +23,21 @@ module.exports = generators.Base.extend({
                     default: false
                 }
             ];
+
+        if(plugins.length){
+            prompts.unshift({
+                name: 'globalPlugins',
+                type: 'checkbox',
+                message: 'Choose from your global plugins:',
+                choices: plugins.map(function(plugin){
+                    return {
+                        value: plugin,
+                        name: plugin.replace('uppercode-', ''),
+                        checked: false
+                    };
+                })
+            });
+        }
 
         this.prompt(prompts, function(answers){
             var globalPlugins = answers.globalPlugins || [],
