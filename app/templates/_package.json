@@ -10,6 +10,8 @@
     "uppercode",
     "hooks"
   ],
+  "repository": {},
+  "homepage": "",
   "author": "Vladimir Kudinov <qdinov@yandex.ru>",
-  "license": "MIT"
+  "license": "WTFPL"
 }
