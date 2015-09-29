@@ -86,15 +86,22 @@ module.exports = generators.Base.extend({
 
         this.template('_package.json', '.githooks/package.json');
 
-        Uppercode.exec('cat', ['.gitignore'], function(err, data){
-            if(err){
-                Uppercode.execSync('touch', ['.gitignore']);
-            }
+        if(this.gitignore){
+            Uppercode.exec('cat', ['.gitignore'], function(err, data){
+                if(err){
+                    Uppercode.execSync('touch', ['.gitignore']);
+                    data = '';
+                }
 
-            Uppercode.execSync('echo', ['".githooks"', '>>', '.gitignore']);
+                if(data.indexOf('.githooks') === -1){
+                    Uppercode.execSync('echo', ['".githooks"', '>>', '.gitignore']);
+                }
+            });
+        }
 
+        setTimeout(function(){
             Uppercode.execSync('chmod', ['-R', '0755', '.githooks/*/uppercode.js']);
-        });
+        }, 50);
     },
     install: function(){
         console.log('Installing plugins...');
