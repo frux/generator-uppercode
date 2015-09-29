@@ -1,7 +1,7 @@
 {
   "name": "generator-uppercode",
   "version": "0.1.0",
-  "description": "Yeoman generator",
+  "description": "Yeoman generator of git hooks",
   "main": "index.js",
   "files": [
     "app",
