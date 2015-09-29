@@ -1,6 +1,6 @@
 {
   "name": "generator-uppercode",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Yeoman generator",
   "main": "index.js",
   "files": [
