@@ -10,48 +10,6 @@ var Uppercode = {
     ChildProcess = require('child_process');
 
 /**
- * Execs command
- * @param command {string} Command line
- * @param args {Array|undefined} Array of string arguments
- * @param callback {Function|undefined} Callback function
- */
-function exec(command, args, callback){
-    var commandProcess;
-
-    if(typeof command === 'string'){
-
-        //if arguments were skipped
-        if(typeof args === 'function'){
-            callback = args;
-        }
-
-        //if arguments is not an array replace it by empty array
-        if(args instanceof Array){
-            args = args.join(' ');
-        }else{
-            args = '';
-        }
-
-        if(typeof callback !== 'function'){
-            callback = function(){};
-        }
-
-        try{
-            //run command
-            ChildProcess.exec(command + ' ' + args, function(err, stdout, stderr){
-                if(err || stderr){
-                    callback(err || stderr.toString());
-                }
-
-                callback(undefined, stdout.toString().replace(/\n$/, ''));
-            });
-        }catch(e){
-            callback(e);
-        }
-    }
-}
-
-/**
  * Synchronously execs command
  * @param command {string} Command line
  * @param args {Array|undefined} Array of string arguments
@@ -82,48 +40,22 @@ function execSync(command, args){
 }
 
 /**
- * Returns list of files staged to commit
- * @param changeFilter {string} Filter by type of file change. Available value: ACDMRTUXB*. Default *. For details lookup for --diff-filter values.
- * @param callback {Function} Callback function
+ * Execs command
+ * @param command {string} Command line
+ * @param args {Array|undefined} Array of string arguments
+ * @param callback {Function|undefined} Callback function
  */
-function stagedFiles(changeFilter, callback){
+function exec(command, args, callback){
+    var data,
+        err;
 
-    //if the first argument is provided
-    if(changeFilter){
-
-        //if the first argument is function
-        if(typeof changeFilter === 'function'){
-            callback = changeFilter;
-
-            //if the first argument is a string
-        }else if(typeof changeFilter === 'string'){
-
-            //if filter is not valid exit
-            if(!/^[ACDMRTUXB\*]+$/.test(changeFilter)){
-                return;
-            }
-        }
-
-        //if filter was not specified use default
-    }else{
-        changeFilter = '*';
+    try{
+        data = execSync(command, args);
+    }catch(e){
+        err = e;
     }
 
-    if(typeof callback !== 'function'){
-        callback = function(){};
-    }
-
-    exec('git', ['diff', '--cached', '--name-only', '--diff-filter=' + changeFilter], function(err, data){
-        var files;
-
-        if(err){
-            callback(err);
-        }
-
-        files = data.split('\n');
-
-        callback(undefined, files);
-    });
+    callback(err, data);
 }
 
 /**
@@ -160,53 +92,21 @@ function stagedFilesSync(changeFilter){
 }
 
 /**
- * Returns list of globally installed npm modules
- * @param grep {string|undefined} Grep pattern
- * @param nameOnly {boolean|undefined} Return names only instead of full path
- * @param callback
+ * Returns list of files staged to commit
+ * @param changeFilter {string} Filter by type of file change. Available value: ACDMRTUXB*. Default *. For details lookup for --diff-filter values.
+ * @param callback {Function} Callback function
  */
-function globalModules(grep, nameOnly, callback){
+function stagedFiles(changeFilter, callback){
+    var data,
+        err;
 
-    if(typeof grep === 'boolean'){
-        callback = nameOnly;
-        nameOnly = grep;
-    }else if(typeof grep === 'function'){
-        callback = grep;
-        nameOnly = false;
+    try{
+        data = stagedFilesSync(changeFilter);
+    }catch(e){
+        err = e;
     }
 
-    if(typeof grep === 'string'){
-        grep = ' | grep ' + grep;
-    }else{
-        grep = '';
-    }
-
-    if(typeof nameOnly === 'function'){
-        callback = nameOnly;
-    }
-
-
-    exec('npm ls -g --depth=0 --parseable' + grep, function(err, data){
-        var modules;
-
-        if(err){
-            callback(err);
-        }
-
-        if(data){
-            modules = data.split('\n');
-
-            if(nameOnly){
-                modules = modules.map(function(modulePath){
-                    return modulePath.substr(modulePath.lastIndexOf('/') + 1);
-                });
-            }
-        }else{
-            modules = [];
-        }
-
-        callback(undefined, modules);
-    });
+    callback(err, data);
 }
 
 /**
@@ -244,6 +144,26 @@ function globalModulesSync(grep, nameOnly){
     }
 
     return modules;
+}
+
+/**
+ * Returns list of globally installed npm modules
+ * @param grep {string|undefined} Grep pattern
+ * @param nameOnly {boolean|undefined} Return names only instead of full path
+ * @param callback
+ */
+function globalModules(grep, nameOnly, callback){
+
+    var data,
+        err;
+
+    try{
+        data = globalModulesSync(grep, nameOnly);
+    }catch(e){
+        err = e;
+    }
+
+    callback(err, data);
 }
 
 /**
