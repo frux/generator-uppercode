@@ -57,5 +57,5 @@
   "safeContextKeyword": "self",
   "validateLineBreaks": "LF",
   "validateQuoteMarks": "'",
-  "validateIndentation": "\t"
+  "validateIndentation": 4
 }
