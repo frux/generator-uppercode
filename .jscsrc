@@ -31,7 +31,7 @@
   "disallowKeywordsOnNewLine": ["else"],
   "disallowMultipleLineBreaks": true,
   "disallowSpaceBeforeComma": true,
-  "disallowSpaceBeforeSemicolon": { "allExcept": [ "(" ] },
+  "disallowSpaceBeforeSemicolon": true,
   "requireSpaceBeforeBlockStatements": false,
   "requireParenthesesAroundIIFE": true,
   "requireSpacesInConditionalExpression": true,
