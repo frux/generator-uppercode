@@ -57,5 +57,6 @@
   "safeContextKeyword": "self",
   "validateLineBreaks": "LF",
   "validateQuoteMarks": "'",
-  "validateIndentation": 4
+  "validateIndentation": 4,
+  "excludeFiles": [".githooks/*", "node_modules"]
 }
