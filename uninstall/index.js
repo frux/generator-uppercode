@@ -6,6 +6,7 @@ module.exports = generators.Base.extend({
     constructor: function(){
         generators.Base.apply(this, arguments);
     },
+
     prompting: function(){
         var done = this.async();
 
@@ -18,9 +19,11 @@ module.exports = generators.Base.extend({
             if(!answers.sure){
                 process.exit(1);
             }
+
             done();
         }.bind(this));
     },
+
     writing: function(){
         Uppercode.execSync('find .githooks -name uppercode.js -exec rm -rf {} \\;');
         Uppercode.execSync('rm -rf .githooks/package.json');

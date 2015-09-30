@@ -6,6 +6,7 @@ module.exports = generators.Base.extend({
     constructor: function(){
         generators.Base.apply(this, arguments);
     },
+
     prompting: function(){
         var done = this.async(),
             plugins = Uppercode.globalModulesSync('uppercode-', true),
@@ -64,6 +65,7 @@ module.exports = generators.Base.extend({
             done();
         }.bind(this));
     },
+
     writing: function(){
         ([
             'applypatch-msg',
@@ -106,9 +108,10 @@ module.exports = generators.Base.extend({
             Uppercode.execSync('chmod', ['-R', '0755', '.githooks/*/uppercode.js']);
         }, 50);
     },
+
     install: function(){
         console.log('Installing plugins...');
-        this.npmInstall(['git-hooks'], { 'saveDev': true });
+        this.npmInstall(['git-hooks'], { saveDev: true });
 
         this.plugins.push('generator-uppercode');
         this.plugins.forEach(function(plugin){
