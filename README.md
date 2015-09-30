@@ -3,6 +3,8 @@
 ## Install
 ``npm i -g generator-uppercode``
 
+Or you can also install it locally at your home directory.
+
 ## Set hooks
 
 ##### Run uppercode
