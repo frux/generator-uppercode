@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/frux/uppercode/issues"
   },
-  "homepage": "https://github.com/frux/uppercode#readme"
+  "homepage": "https://github.com/frux/uppercode#readme",
+  "devDependencies": {
+    "git-hooks": "^1.0.0"
+  }
 }
